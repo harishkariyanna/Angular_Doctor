@@ -1,0 +1,22 @@
+<h3>Doctors</h3>
+<div *ngIf="loading">Loading...</div>
+<div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+<table class="table table-striped" *ngIf="!loading && doctors?.length">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Specialization</th>
+      <th>Hospital</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let d of doctors">
+      <td>{{ d.doctorId }}</td>
+      <td>{{ d.name }}</td>
+      <td>{{ d.specialization }}</td>
+      <td>{{ d.hospital?.name }}</td>
+    </tr>
+  </tbody>
+</table>
+<div *ngIf="!loading && (!doctors || doctors.length === 0)" class="alert alert-info">No doctors found.</div>
