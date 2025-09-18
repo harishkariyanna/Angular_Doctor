@@ -19,8 +19,6 @@ export class RoleGuard implements CanActivate {
       return true;
     }
     
-    console.log('Current User:', this.auth.getCurrentUser());
-    console.log('Expected Roles:', route.data['roles']);
     // not allowed
     this.router.navigate(['/']);
     return false;
