@@ -1,15 +1,12 @@
 ﻿using DoctorApplication.Models;
 using DoctorApplication.Service;
 using DoctorApplication.DTOs;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DoctorApplication.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
     public class DoctorsController : ControllerBase
     {
         private readonly DoctorService _doctorService;
@@ -20,31 +17,52 @@ namespace DoctorApplication.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Doctor>>> GetDoctors()
+        public async Task<ActionResult<IEnumerable<DoctorDto>>> GetDoctors()
         {
-            return Ok(await _doctorService.GetAllAsync());
+            var doctors = await _doctorService.GetAllAsync();
+
+            var result = doctors.Select(d => new DoctorDto
+            {
+                DoctorId = d.DoctorId,
+                Name = d.Name,
+                Specialization = d.Specialization,
+                HospitalId = d.HospitalId,
+                HospitalName = d.Hospital?.Name ?? string.Empty
+            });
+
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Doctor>> GetDoctor(string id)
+        public async Task<ActionResult<DoctorDto>> GetDoctor(string id)
         {
             var doctor = await _doctorService.GetByIdAsync(id);
             if (doctor == null) return NotFound();
-            return Ok(doctor);
+
+            var dto = new DoctorDto
+            {
+                DoctorId = doctor.DoctorId,
+                Name = doctor.Name,
+                Specialization = doctor.Specialization,
+                HospitalId = doctor.HospitalId,
+                HospitalName = doctor.Hospital?.Name ?? string.Empty
+            };
+
+            return Ok(dto);
         }
 
         [HttpPost]
         public async Task<ActionResult> CreateDoctor([FromBody] DoctorDto dto)
         {
-            //mapping of DTO with model
             var doctor = new Doctor
             {
                 Name = dto.Name,
                 Specialization = dto.Specialization,
                 HospitalId = dto.HospitalId
             };
-            await _doctorService.AddAsync(doctor);
-            return Ok(doctor);
+            var created = await _doctorService.AddAsync(doctor);
+
+            return CreatedAtAction(nameof(GetDoctor), new { id = created.DoctorId }, created);
         }
 
         [HttpPut("{id}")]

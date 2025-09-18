@@ -8,9 +8,9 @@
       <ul class="navbar-nav">
         <li *ngIf="!auth.isLoggedIn()" class="nav-item"><a class="nav-link" routerLink="/login">Login</a></li>
         <li *ngIf="auth.isLoggedIn()" class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">{{ auth.getCurrentUser()?.username }}</a>
+          <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">{{ auth.getCurrentUser()?.userName }}</a>
           <ul class="dropdown-menu dropdown-menu-end">
-            <li><span class="dropdown-item">Role: {{ auth.getCurrentUser()?.role }}</span></li>
+            <li><span class="dropdown-item">Role: {{ auth.getCurrentUserRole() }}</span></li>
             <li><button class="dropdown-item" (click)="logout()">Logout</button></li>
           </ul>
         </li>

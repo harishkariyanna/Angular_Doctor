@@ -26,7 +26,7 @@ export class LoginComponent {
     const { username, password } = this.form.value;
     this.auth.login(username, password).subscribe({
       next: () => this.router.navigate(['/doctors']),
-      error: (err) => (this.error = err?.error?.message || 'Login failed')
+      error: (err) => (this.error = err?.error?.message || err?.message || 'Login failed')
     });
   }
 }

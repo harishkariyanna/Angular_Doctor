@@ -15,8 +15,8 @@ export class AuthService {
     token: string; username: string; role: string | { roleName: string };
   }> {
     return this.http
-      .post<{ token: string; username: string; role: string | { roleName: string } }>(`${this.base}/login`, {
-        username,
+      .post<{ token: string; username: string; role: string | { roleName: string } }>(`${this.base}/Token/login`, {
+        userName: username,
         password
       })
       .pipe(
@@ -25,8 +25,8 @@ export class AuthService {
             const resolvedRole = typeof resp.role === 'string' ? resp.role : resp.role.roleName;
             localStorage.setItem('jwt_token', resp.token);
             localStorage.setItem('current_user', JSON.stringify({
-              username: resp.username,
-              role: resolvedRole
+              userName: resp.username,
+              role: { roleName: resolvedRole }
             }));
           }
         })
@@ -34,7 +34,7 @@ export class AuthService {
   }
 
   register(user: User): Observable<User> {
-    return this.http.post<User>(`${this.base}/register`, user);
+    return this.http.post<User>(`${this.base}/Token/register`, user);
   }
 
   logout(): void {
@@ -46,7 +46,7 @@ export class AuthService {
     return localStorage.getItem('jwt_token');
   }
 
-  getCurrentUser(): any {
+  getCurrentUser(): User | null {
     const v = localStorage.getItem('current_user');
     return v ? JSON.parse(v) : null;
   }
@@ -57,7 +57,7 @@ export class AuthService {
 
   getCurrentUserRole(): string | null {
     const user = this.getCurrentUser();
-    return user?.role ?? null;
+    return user?.role?.roleName ?? null;
   }
 
   isAdmin(): boolean {

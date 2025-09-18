@@ -6,6 +6,7 @@ export interface Doctor {
   name?: string | null;
   specialization?: string | null;
   hospitalId: string;
+  hospitalName?: string | null;
   hospital?: Hospital | null;
   patients?: Patient[] | null;
 }

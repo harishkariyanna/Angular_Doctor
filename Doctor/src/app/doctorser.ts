@@ -17,7 +17,7 @@ export class DoctorserService {
   }
 
   getById(id: string): Observable<Doctor> {
-    return this.http.get<Doctor>(`${this.base}/${id}`);
+    return this.http.get<Doctor>(`${this.base}/Doctors/${id}`);
   }
 
   getHospitals(): Observable<Hospital[]> {
@@ -29,10 +29,10 @@ export class DoctorserService {
   }
 
   update(doc: Doctor): Observable<Doctor> {
-    return this.http.put<Doctor>(`${this.base}/${doc.doctorId}`, doc);
+    return this.http.put<Doctor>(`${this.base}/Doctors/${doc.doctorId}`, doc);
   }
 
   delete(id: string): Observable<any> {
-    return this.http.delete(`${this.base}/${id}`);
+    return this.http.delete(`${this.base}/Doctors/${id}`);
   }
 }
